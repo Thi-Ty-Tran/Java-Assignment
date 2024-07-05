@@ -82,4 +82,47 @@ public class BowlingGame {
         System.out.println();
     }
 
+    private static int getTurnScores(String playerName, Scanner scanner) {
+        int firstRoll = getRoll(playerName, scanner);
+        if (firstRoll == MAX_PINS) {
+            // Strike
+            return MAX_PINS + getRoll(playerName, scanner) + getRoll(playerName, scanner);
+        } else {
+            int secondRoll = getRoll(playerName, scanner);
+            if (firstRoll + secondRoll == MAX_PINS) {
+                // Spare
+                return MAX_PINS + getRoll(playerName, scanner);
+            } else {
+                // Open frame
+                return firstRoll + secondRoll;
+            }
+        }
+    }
+
+    private static int getRoll(String playerName, Scanner scanner) {
+        int score;
+        while (true) {
+            System.out.printf("%s, enter the number of pins knocked down (0-%d): ", playerName, MAX_PINS);
+            String input = scanner.nextLine().trim();
+            try {
+                score = Integer.parseInt(input);
+                if (score >= 0 && score <= MAX_PINS) {
+                    break; // Valid input, break the loop
+                } else {
+                    System.out.printf("Invalid input. Please enter a number between 0 and %d.\n", MAX_PINS);
+                }
+            } catch (NumberFormatException e) {
+                System.out.printf("\"%s\" is not a valid number. Please enter again!\n", input);
+            }
+        }
+        return score;
+    }
+
+    private static int getGameScores(int[] scores) {
+        int total = 0;
+        for (int score : scores) {
+            total += score;
+        }
+        return total;
+    }
 }
